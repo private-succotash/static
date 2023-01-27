@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      .card-cover {
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+      }
+    </style>
+  </head>
+  <body onload="onPageLoaded();">
+    <div class="container">
+      <div class="text-center px-4 py-5">
+        <h1>Select your favourite fruit!</h1>
+      </div>
+      <div id="items" class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4"></div>
+    </div>
+    <div id="modal-container"></div>
+
+    <script>
+      function onPageLoaded() {
+        var items = [];
+
+        items = [
+          {
+            name: "Banana",
+            backgroundImage: "https://getbootstrap.com/docs/5.3/examples/features/unsplash-photo-2.jpg",
+          },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+          { name: "", backgroundImage: "" },
+        ].map((item) => {
+          return `
+          <div class="col">
+          <div
+            onclick="openModal('${item.name}')"
+            class="card card-cover h-80 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+            style="background-image: url('${item.backgroundImage}')"
+          >
+            <div class="d-flex flex-column h-100 p-3 text-white text-shadow-1">
+              <h3 class="pt-5 display-6 lh-1 fw-bold">${item.name}</h3>
+            </div>
+          </div>
+        </div>
+        `;
+        });
+        document.getElementById("items").innerHTML = items.join("");
+      }
+
+      function onFruitSelected(fruitName) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            // response
+            // document.getElementById("demo").innerHTML = this.responseText;
+        //     document.getElementById("modal-container").innerHTML = `
+        //     <div class="modal d-block" tabindex="-1" role="dialog" id="modalSheet">
+        //         <div class="modal-dialog modal-fullscreen" role="document">
+        //             <div class="modal-content rounded-4 shadow">
+        //                 <div class="modal-header border-bottom-0">
+        //                     <h1 class="modal-title fs-5">${fruitName}</h1>
+        //             </div>
+        //                 <div class="modal-body py-0">
+        //                     <ul class="list-group list-group-flush">
+        //                         <li class="list-group-item ps-0">
+        //                             <div class="ms-2 me-auto">
+        //                                 <div class="fw-bold">Carbohydrates</div>
+        //                                 Content for list item
+        //                             </div>
+        //                         </li>
+        //                         <li class="list-group-item ps-0">
+        //                             <div class="ms-2 me-auto">
+        //                                 <div class="fw-bold">Protein</div>
+        //                                 Content for list item
+        //                             </div>
+        //                         </li>
+        //                         <li class="list-group-item ps-0">
+        //                             <div class="ms-2 me-auto">
+        //                                 <div class="fw-bold">Fat</div>
+        //                                 Content for list item
+        //                             </div>
+        //                         </li>
+        //                         <li class="list-group-item ps-0">
+        //                             <div class="ms-2 me-auto">
+        //                                 <div class="fw-bold">Calories</div>
+        //                                 Content for list item
+        //                             </div>
+        //                         </li>
+        //                         <li class="list-group-item ps-0">
+        //                             <div class="ms-2 me-auto">
+        //                                 <div class="fw-bold">Sugar</div>
+        //                                 Content for list item
+        //                             </div>
+        //                         </li>
+        //                     </ul>
+        //                 </div>
+        //                 <div class="modal-footer flex-column border-top-0">
+        //                     <button type="button" class="btn btn-lg btn-light w-100 mx-0" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // `;
+          }
+        };
+        xhttp.open("GET", "https://fruityvice.com/api/fruit/" + fruitName, true);
+        xhttp.send();
+      }
+
+      function openModal(fruitName) {
+        // "carbohydrates": 11.4,
+        // "protein": 0.3,
+        // "fat": 0.4,
+        // "calories": 52,
+        // "sugar": 10.3
+        document.getElementById("modal-container").innerHTML = `
+            <div class="modal d-block" tabindex="-1" role="dialog" id="modalSheet">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="modal-content rounded-4 shadow">
+                        <div class="modal-header border-bottom-0">
+                            <h1 class="modal-title fs-5">${fruitName}</h1>
+                        </div>
+                        <div class="modal-footer flex-column border-top-0">
+                            <button type="button" class="btn btn-lg btn-light w-100 mx-0" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        onFruitSelected(fruitName);
+      }
+
+      function closeModal() {
+        document.getElementById("modal-container").innerHTML = ``;
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
